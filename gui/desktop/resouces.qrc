@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>img/tetris/blue.png</file>
+        <file>img/tetris/cyan.png</file>
+        <file>img/tetris/green.png</file>
+        <file>img/tetris/light-blue.png</file>
+        <file>img/tetris/orange.png</file>
+        <file>img/tetris/red.png</file>
+        <file>img/tetris/yellow.png</file>
+    </qresource>
+</RCC>

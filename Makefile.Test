@@ -1,0 +1,79 @@
+UNAME_S := $(shell uname -s)
+
+CC = gcc
+FLAGS = -Werror -Wextra -Wall
+GCOV_FLAGS = -fprofile-arcs -ftest-coverage
+PROJECT_NAME = brick_game
+
+ifeq ($(UNAME_S),Darwin)
+	TST_LIBS := -I/opt/homebrew/opt/check/include -L/opt/homebrew/opt/check/lib -lcheck 
+	TST_FLAG := -I/opt/homebrew/opt/check/include 
+else
+	TST_LIBS = $(shell pkg-config --libs check) 
+	TST_FLAG = 
+endif
+
+DIR_FUNC_C = $(wildcard ./brick_game )
+DIR_TEST_C = ./tests
+
+DIR_FUNC_OBJ = obj_func
+DIR_FUNC_GCOV_OBJ = obj_func_gcov
+DIR_TEST_OBJ = obj_test
+
+FILES_FUNC_C := $(wildcard $(addsuffix /**/*.c,$(DIR_FUNC_C)))
+FILES_FUNC_H := $(wildcard $(addsuffix /**/*.h,$(DIR_FUNC_C)))
+FILES_TEST_C := $(wildcard $(DIR_TEST_C)/*.c)
+FILES_TEST_H := $(wildcard $(DIR_TEST_C)/*.h)
+
+FILES_FUNC_OBJ := $(foreach dir,$(DIR_FUNC_C), $(patsubst $(dir)/%.c,$(DIR_FUNC_OBJ)/$(dir)/%.o,$(wildcard $(dir)/**/*.c)))
+FILES_FUNC_GCOV_OBJ := $(foreach dir,$(DIR_FUNC_C), $(patsubst $(dir)/%.c,$(DIR_FUNC_GCOV_OBJ)/$(dir)/%.o,$(wildcard $(dir)/**/*.c)))
+#FILES_FUNC_OBJ := $(patsubst $(DIR_FUNC_C)/%.c, $(DIR_FUNC_OBJ)/%.o, $(FILES_FUNC_C))
+#FILES_FUNC_GCOV_OBJ := $(patsubst $(DIR_FUNC_C)/%.c, $(DIR_FUNC_GCOV_OBJ)/%.o, $(FILES_FUNC_C))
+FILES_TEST_OBJ := $(patsubst $(DIR_TEST_C)/%.c, $(DIR_TEST_OBJ)/%.o, $(FILES_TEST_C))
+
+
+all: makedirs gcov_report
+
+test : makedirs $(FILES_FUNC_OBJ) $(FILES_TEST_OBJ)
+	$(CC)  $(FILES_FUNC_OBJ) $(FILES_TEST_OBJ) -o test $(TST_LIBS) -lncursesw
+	./test
+
+
+$(DIR_FUNC_OBJ)/%.o: %.c
+	mkdir -p $(@D)
+	$(CC) $(FLAGS) -c $< -o $@ 
+
+$(DIR_TEST_OBJ)/%.o: $(DIR_TEST_C)/%.c
+	$(CC) $(FLAGS) -c $< -o $@  $(TST_FLAG) -lncursesw
+
+gcov_report: clean_gcov makedirs $(FILES_TEST_OBJ) $(FILES_FUNC_GCOV_OBJ)
+	$(CC) $(GCOV_FLAGS) $(FILES_TEST_OBJ) $(FILES_FUNC_GCOV_OBJ) -o gcov_test $(TST_LIBS) -lncursesw
+	-./gcov_test
+	gcovr --html --html-details -o ./report/index.html
+	#-rm $(DIR_FUNC_GCOV_OBJ)/*gcda $(DIR_FUNC_GCOV_OBJ)/*gcno
+
+$(DIR_FUNC_GCOV_OBJ)/%.o: %.c
+	mkdir -p $(@D)
+	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
+
+makedirs:
+	mkdir -p obj_func_gcov obj_func obj_test report bin
+
+clang:
+	clang-format -n *.h $(FILES_FUNC_C) $(FILES_FUNC_H) $(FILES_TEST_C) $(FILES_TEST_H)
+
+clangi:
+	clang-format -i *.h $(FILES_FUNC_C) $(FILES_FUNC_H) $(FILES_TEST_C) $(FILES_TEST_H)
+
+cpp:
+	cppcheck --enable=all --suppress=missingIncludeSystem ../src
+
+clean_gcov:
+	-rm -r obj_func_gcov/*
+
+clean:
+	-rm test s21_gcov_test *.a
+	-rm *.exe
+	-rm -r obj_func obj_func_gcov obj_test report bin
+	-rm test-* $(DIR_FUNC_GCOV_OBJ)/*.o
+	# echo $(FILES_FUNC_OBJ)
