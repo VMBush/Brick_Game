@@ -64,6 +64,7 @@ void clearGameData()
     free(gameStatus.field[i]);
   }
   free(gameStatus.field);
+  gameStatus.field = nullptr;
 }
 
 void setHScoreToFile()
