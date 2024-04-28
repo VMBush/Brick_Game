@@ -3,16 +3,19 @@ UNAME_S := $(shell uname -s)
 CC = g++
 FLAGS = -Werror -Wextra -Wall
 GCOV_FLAGS = -fprofile-arcs -ftest-coverage
-PROJECT_NAME = game
+PROJECT_NAME_CLI = terminal
+PROJECT_NAME_GUI = desktop.exe
 RECORD_PATH_TETRIS = $(realpath ./brick_game/tetris/record.txt)
 RECORD_PATH_SNAKE = $(realpath ./brick_game/snake/record.txt)
 
 ifeq ($(UNAME_S),Darwin)
 	TST_LIBS := -I/opt/homebrew/opt/check/include -L/opt/homebrew/opt/check/lib -lcheck 
 	TST_FLAG := -I/opt/homebrew/opt/check/include 
+	PROJECT_NAME_GUI = desktop
 else
 	TST_LIBS = $(shell pkg-config --libs check) 
 	TST_FLAG = 
+	PROJECT_NAME_GUI = desktop.exe
 endif
 
 DIR_FUNC_C = $(wildcard ./gui/cli ./brick_game )
@@ -22,12 +25,12 @@ FILES_FUNC_C := $(wildcard $(shell find $(DIR_FUNC_C) -name '*.c') $(shell find 
 
 .PHONY: gui tests
 
-all: #makedirs $(PROJECT_NAME) #gcov_report
+all: install dist
 	# g++ $(FLAGS) -g $(FILES_FUNC_C)  -lncursesw -o ./$(PROJECT_NAME)
 	# ./$(PROJECT_NAME) #$(RECORD_PATH_TETRIS) $(RECORD_PATH_SNAKE)
-	@echo $(wildcard $(addsuffix /**/*.c, ./gui/cli))
-	@echo $(RECORD_PATH_TETRIS)
-	@echo $(FILES_FUNC_C)
+	# @echo $(wildcard $(addsuffix /**/*.c, ./gui/cli))
+	# @echo $(RECORD_PATH_TETRIS)
+	# @echo $(FILES_FUNC_C)
 	
 
 install:
@@ -43,11 +46,10 @@ dvi:
 	-xdg-open Readme.md
 
 dist:
-	mv gui/desktop/release/desktop.exe desktop.exe 
+	mv gui/desktop/release/desktop.exe $(PROJECT_NAME_GUI)
 
 cli:
-	g++ $(FLAGS) -g $(FILES_FUNC_C)  -lncursesw -o ./$(PROJECT_NAME)
-	#./$(PROJECT_NAME)
+	g++ $(FLAGS) -g $(FILES_FUNC_C)  -lncursesw -o ./$(PROJECT_NAME_CLI)
 
 gui:
 	cd ./gui/desktop && qmake && make
@@ -73,7 +75,7 @@ clean_gcov:
 
 clean:
 	-rm test s21_gcov_test *.a
-	-rm *.exe
+	-rm *.exe desktop
 	-rm -r obj_func obj_func_gcov obj_test report report_cpp bin
 	-rm test-* $(DIR_FUNC_GCOV_OBJ)/*.o
 	-rm -r gui/desktop/debug gui/desktop/release gui/desktop/Makefile* gui/desktop/.qmake.*
