@@ -45,12 +45,18 @@ private:
     void tetrisTick();
     void redrawTetris();
 
+    void snakeTick();
+    void redrawSnake();
+
     void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void keyPressEventTetris(int key);
     void keyPressEventSnake(int key);
 
     QTimer* timer;
+    bool actionPushed;
 };
 
 QPixmap getTetrisImg(int type);
+QPixmap getSnakeImg(int type);
 #endif // MAINWINDOW_H

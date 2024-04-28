@@ -1,6 +1,12 @@
 #include "tests.h"
 
+const char *tetrisRecordPath = "";
+const char *snakeRecordPath = "";
+
 int main() {
+  tetrisRecordPath = "brick_game/tetris/record.txt";
+  snakeRecordPath = "brick_game/snake/record.txt";
+
   Suite *s_tetris = make_tetris_suite();
   // Suite *s_remove = make_remove_suite();
 

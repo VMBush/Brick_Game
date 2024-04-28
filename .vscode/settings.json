@@ -68,6 +68,7 @@
     "thread": "cpp",
     "cinttypes": "cpp",
     "typeinfo": "cpp",
-    "brick_game.h": "c"
+    "brick_game.h": "c",
+    "Makefile.Test.C": "cpp"
   }
 }

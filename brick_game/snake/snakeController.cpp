@@ -21,6 +21,7 @@ void pushBtnSnake(int btn)
     togglePause();
     break;
   case 10:
+    // Enter
     actionPush();
     break;
   case 258 ... 261:

@@ -1,0 +1,27 @@
+UNAME_S := $(shell uname -s)
+
+CC = g++
+FLAGS = -Werror -Wextra -Wall
+GCOV_FLAGS = -fprofile-arcs -ftest-coverage
+
+DIR_REPORT = report_cpp
+
+ifeq ($(UNAME_S),Darwin)
+	TEST_FLAGS := -I/opt/homebrew/opt/googletest/include -L/opt/homebrew/opt/googletest/lib -lgtest
+	TEST_LIBS:= -I/opt/homebrew/opt/googletest/include 
+else
+	TEST_FLAGS = -lgtest -lgtest_main
+	TEST_LIBS = 
+endif
+
+DIR_FUNC_C = $(wildcard ./tests_cpp ./brick_game )
+
+FILES_FUNC_C := $(wildcard $(shell find $(DIR_FUNC_C) -name '*.cpp'))
+
+.PHONY: gui tests
+
+all: 
+	$(CC) $(FLAGS) $(FILES_FUNC_C) $(GCOV_FLAGS) -o ./test_cpp $(TEST_FLAGS) 
+	./test_cpp	
+	gcovr --html --html-details -o $(DIR_REPORT)/index.html
+	-rm *.gcda *.gcno

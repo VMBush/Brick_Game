@@ -13,7 +13,9 @@ SOURCES += \
     ../../brick_game/snake/snakeModel.cpp \
     ../../brick_game/tetris/tetris.c \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    snakeView.cpp \
+    tetrisView.cpp
 
 HEADERS += \
     ../../brick_game/brick_game.h \
@@ -35,4 +37,5 @@ DISTFILES += \
     ../../brick_game/tetris/record.txt
 
 RESOURCES += \
+    ../../globalResources.qrc \
     resouces.qrc

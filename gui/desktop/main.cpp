@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QFileInfo>
 
 #include <QApplication>
 #include <filesystem>
@@ -12,13 +13,17 @@ int main(int argc, char *argv[])
 {
     std::string abc = std::filesystem::current_path().u8string();
     std::cout << "Current path is " << std::filesystem::current_path().u8string() << '\n';
+    QFileInfo fileInfo(":/records/brick_game/snake/record.txt");
+    // std::cout << "REC: " << fileInfo.absoluteFilePath();
     if (argc > 1)
     {
         tetrisRecordPath = argv[1];
         snakeRecordPath = argv[2];
     } else {
-        tetrisRecordPath = "../../brick_game/tetris/record.txt";
-        snakeRecordPath = "../../brick_game/snake/record.txt";
+        // tetrisRecordPath = "../../brick_game/tetris/record.txt";
+        // snakeRecordPath = "../../brick_game/snake/record.txt";
+        tetrisRecordPath = "./brick_game/tetris/record.txt";
+        snakeRecordPath = "./brick_game/snake/record.txt";
     }
 
     QApplication a(argc, argv);

@@ -33,10 +33,10 @@ void redrawFieldSnake() {
   GameInfo_t field = getStateSnake();
   move(1, 6);
   attron(COLOR_PAIR(EMPTY));
-  hline(' ', 11);
+  hline(' ', 40);
   if (field.end) {
     attron(COLOR_PAIR(TEXT_FOCUS));
-    mvaddstr(1, 6, "GAME OVER!");
+    mvaddstr(1, 6, "PRESS ENTER TO START NEW GAME!");
   }
 
   int y, x;

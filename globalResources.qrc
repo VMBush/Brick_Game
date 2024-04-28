@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/records">
+        <file>brick_game/snake/record.txt</file>
+        <file>brick_game/tetris/record.txt</file>
+    </qresource>
+</RCC>

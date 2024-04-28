@@ -7,5 +7,7 @@
         <file>img/tetris/orange.png</file>
         <file>img/tetris/red.png</file>
         <file>img/tetris/yellow.png</file>
+        <file>img/snake/apple.png</file>
+        <file>img/snake/snake.png</file>
     </qresource>
 </RCC>
