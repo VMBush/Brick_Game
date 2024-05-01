@@ -1,8 +1,11 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+
 #include "../brick_game.h"
 
 

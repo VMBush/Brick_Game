@@ -4,7 +4,7 @@
 void MainWindow::playSnake() {
     timer = new QTimer(this);
     timer->setInterval(830);
-    QObject::connect(timer, &QTimer::timeout, this, snakeTick);
+    QObject::connect(timer, &QTimer::timeout, this, &MainWindow::snakeTick);
     timer->start();
 
     ui->gameOver->setVisible(true);

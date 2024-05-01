@@ -12,6 +12,8 @@ ifeq ($(UNAME_S),Darwin)
 	TST_LIBS := -I/opt/homebrew/opt/check/include -L/opt/homebrew/opt/check/lib -lcheck 
 	TST_FLAG := -I/opt/homebrew/opt/check/include 
 	PROJECT_NAME_GUI = desktop
+	FLAGS = -Werror -Wextra -Wall -I/usr/local/include/ncurses
+
 else
 	TST_LIBS = $(shell pkg-config --libs check) 
 	TST_FLAG = 
@@ -20,6 +22,9 @@ endif
 
 DIR_FUNC_C = $(wildcard ./gui/cli ./brick_game )
 DIR_TEST_C = ./tests
+FILES_C := $(wildcard $(shell find $(DIR_FUNC_C) -name '*.c'))
+FILES_CPP := $(wildcard $(shell find $(DIR_FUNC_C) -name '*.cpp'))
+
 
 FILES_FUNC_C := $(wildcard $(shell find $(DIR_FUNC_C) -name '*.c') $(shell find $(DIR_FUNC_C) -name '*.cpp'))
 
@@ -49,7 +54,10 @@ dist:
 	mv gui/desktop/release/desktop.exe $(PROJECT_NAME_GUI)
 
 cli:
-	g++ $(FLAGS) -g $(FILES_FUNC_C)  -lncursesw -o ./$(PROJECT_NAME_CLI)
+	@echo $(FILES_C)
+	#gcc $(FLAGS) -g $(FILES_C) -lncurses -o ./$(PROJECT_NAME_CLI)
+	g++ $(FLAGS) -g $(FILES_CPP) $(FILES_C) -lncursesw -o ./$(PROJECT_NAME_CLI)
+	# g++ $(FLAGS) -g $(FILES_FUNC_C)  -lncursesw -o ./$(PROJECT_NAME_CLI)
 
 gui:
 	cd ./gui/desktop && qmake && make

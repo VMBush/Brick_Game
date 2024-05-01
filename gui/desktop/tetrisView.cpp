@@ -4,7 +4,7 @@
 void MainWindow::playTetris() {
     timer = new QTimer(this);
     timer->setInterval(830);
-    QObject::connect(timer, &QTimer::timeout, this, tetrisTick);
+    QObject::connect(timer, &QTimer::timeout, this, &MainWindow::tetrisTick);
     timer->start();
 
     startNewGameTetris();

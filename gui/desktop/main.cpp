@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
     std::cout << "Current path is " << std::filesystem::current_path().u8string() << '\n';
     QFileInfo fileInfo(":/records/brick_game/snake/record.txt");
     // std::cout << "REC: " << fileInfo.absoluteFilePath();
+
     if (argc > 1)
     {
         tetrisRecordPath = argv[1];
